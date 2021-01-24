@@ -1,0 +1,247 @@
+<!doctype <!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Lesson</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://unpkg.com/vue"></script>
+    <script src="lessons.js"></script>
+</head>
+<style>
+    figure>img {
+        float: left;
+        width: 180px;
+    }
+
+    .subject {
+        border: 1px solid gray;
+    }
+
+    .row:after {
+        content: "";
+        display: table;
+        clear: both;
+    }
+
+    .column {
+        float: left;
+        width: 300px;
+        padding-right: 10px;
+        height: 230px;
+        margin-top: 20px;
+        margin-right: 10px;
+        border: 1px solid black;
+        text-align: right;
+    }
+
+    #app {
+        padding-left: 150px;
+    }
+
+    figure>img {
+        width: 80px;
+        height: 100px;
+    }
+    button{
+            border:1px solid blue;
+            background:#3090C7;
+            color:white;
+            padding:5px;
+            border-radius: 10px;
+
+     }
+    button:hover{
+        opacity:0.5;
+    }
+    a{
+            font-size:25px;
+            border:1px solid blue;
+            color:white;
+            background:#3090C7;
+            text-decoration: none;
+            padding:5px;
+            border-radius: 10px;
+        }
+</style>
+
+<body>
+
+
+    <div id="app">
+        <div>
+            <div style="display:inline-block">
+                <p>Sort By</p>
+                <input type="radio" id="subject" value="subject" v-model="filterCriteria"><label for="subject">Subject</label>
+                <input type="radio" id="price" value="price" v-model="filterCriteria"><label for="price">Price</label>
+                <input type="radio" id="location" value="location" v-model="filterCriteria"><label for="location">Location</label>
+                <input type="radio" id="availability" value="availability" v-model="filterCriteria"><label for="availability">Availability</label>
+            </div>
+            <div style="padding-left:50px; display: inline-block">
+                <input type="radio" id="ascending" name="filterSorting" value="ascending" v-model=" filterOrder"
+                    ><label for="ascending">Ascending</label>
+                <input type="radio" id="descending" name="filterSorting" value="descending" v-model=" filterOrder"><label
+                    for="descending">descending</label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="column" v-for="lesson in checkForFilter">
+                <figure>
+                    <img v-bind:src="lesson.imagePath">
+                </figure>
+                <h4>Subject: {{lesson.subject}}</h4>
+                <h4>Location: {{lesson.location}}</h4>
+                <h4>Price: {{lesson.price}}</h4>
+                <h4>Spaces: {{lesson.spaces}}</h4>
+
+                <button v-on:click='addToCart(lesson)' v-if='lesson.spaces>0'>Add to Cart</button>
+
+            </div>
+        </div>
+        <br>
+
+        <a href="cart.html" v-if='cart.length>0'>Go to Shopping cart</a>
+    </div>
+    <script>
+
+        let app2 = new Vue({
+            el: '#app',
+            data: {
+
+                lessons: lessons,
+                cart: cart,
+                filterCriteria: 'subject',
+                filterOrder: 'ascending'
+
+            },
+            methods: {
+                addToCart: function (lesson) {
+                    this.cart.push({ subject: lesson.subject, location: lesson.location, price: lesson.price, spaces: lesson.spaces, imagePath: lesson.imagePath });
+                    lesson.spaces -= 1;
+                    localStorage.clear();
+                    localStorage.cart = JSON.stringify(this.cart);
+                    let retrievedResult = JSON.parse(localStorage.cart);
+                }
+
+
+            },
+
+
+            computed: {
+                checkForFilter() {
+                    if (this.filterCriteria == "subject" && this.filterOrder == "ascending") {
+                        function compare(a, b) {
+                            if (a.subject > b.subject)
+                                return 1;
+                            if (a.subject < b.subject)
+                                return -1;
+                            else
+                                return 0;
+                        }
+
+                        return this.lessons.sort(compare);
+
+                    }
+                    else if (this.filterCriteria == "subject" && this.filterOrder == "descending") {
+                        function compare(a, b) {
+                            if (a.subject > b.subject)
+                                return -1;
+                            if (a.subject < b.subject)
+                                return 1;
+                            else
+                                return 0;
+                        }
+
+                        return this.lessons.sort(compare);
+
+                    }
+                    else if (this.filterCriteria == "location" && this.filterOrder == "ascending") {
+                        function compare(a, b) {
+                            if (a.location > b.location)
+                                return 1;
+                            if (a.location < b.location)
+                                return -1;
+                            else
+                                return 0;
+                        }
+
+                        return this.lessons.sort(compare);
+
+                    }
+                    else if (this.filterCriteria == "location" && this.filterOrder == "descending") {
+                        function compare(a, b) {
+                            if (a.location > b.location)
+                                return -1;
+                            if (a.location < b.location)
+                                return 1;
+                            else
+                                return 0;
+                        }
+
+                        return this.lessons.sort(compare);
+
+                    }
+                    else if (this.filterCriteria == "price" && this.filterOrder == "ascending") {
+                        function compare(a, b) {
+                            if (a.price > b.price)
+                                return 1;
+                            if (a.price < b.price)
+                                return -1;
+                            else
+                                return 0;
+                        }
+
+                        return this.lessons.sort(compare);
+
+                    }
+                    else if (this.filterCriteria == "price" && this.filterOrder == "descending") {
+                        function compare(a, b) {
+                            if (a.price > b.price)
+                                return -1;
+                            if (a.price < b.price)
+                                return 1;
+                            else
+                                return 0;
+                        }
+
+                        return this.lessons.sort(compare);
+
+                    }
+                    else if (this.filterCriteria == "availability" && this.filterOrder == "ascending") {
+                        function compare(a, b) {
+                            if (a.spaces > b.spaces)
+                                return 1;
+                            if (a.spaces < b.spaces)
+                                return -1;
+                            else
+                                return 0;
+                        }
+
+                        return this.lessons.sort(compare);
+
+                    }
+                    else if (this.filterCriteria == "availability" && this.filterOrder == "descending") {
+                        function compare(a, b) {
+                            if (a.spaces > b.spaces)
+                                return -1;
+                            if (a.spaces < b.spaces)
+                                return 1;
+                            else
+                                return 0;
+                        }
+
+                        return this.lessons.sort(compare);
+
+                    }
+                }
+            }
+        })
+
+
+
+    </script>
+
+</body>
+
+</html>
