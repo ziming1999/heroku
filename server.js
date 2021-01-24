@@ -14,7 +14,7 @@ app.param('collectionName',(req,res,next,collectionName)=>{
 })
 
 app.get('/',(req,res,next)=>{
-    res.send("sdda");
+    res.send("testing");
 })
 
 app.post('/collection/:collectionName',(res,req,next)=>{
@@ -29,6 +29,11 @@ app.get('/collection/:collectionName',(req,res,next)=>{
         res.send(results);
     })
 })
+app.use(function(req,res,next){
+    res.header("Access-Control-Allow-Origin","*");
+    res.header("Access-Control-Allow-Headers","*");
+    next();
+});
 
 
 const port = process.env.PORT || 3000;
