@@ -105,6 +105,24 @@
     </div>
     <script>
 
+        let store = new Vue({
+            data:{lessons:{}},
+            created:function(){
+                fetch('https://cst3145-heroku.herokuapp.com/collection/lessons').then(
+                    function(response)
+                    {
+                        response.json().then(
+                            function(json){
+                                store.lessons=json;
+                                console.log(store.products);
+                            }
+                        )
+                    }
+                )
+
+            }
+        })
+
         let app2 = new Vue({
             el: '#app',
             data: {
