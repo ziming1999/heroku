@@ -8,6 +8,11 @@ mongoClient.connect('mongodb+srv://ziming99:coolsinxx2@cluster0.e9nwn.mongodb.ne
 })
 app.use(express.json());
 
+app.use(function(req,res,next){
+    res.header("Access-Control-Allow-Origin","*");
+    res.header("Access-Control-Allow-Headers","*");
+    next();
+});
 app.param('collectionName',(req,res,next,collectionName)=>{
     req.collection = db.collection(collectionName);
     return next();
@@ -29,11 +34,7 @@ app.get('/collection/:collectionName',(req,res,next)=>{
         res.send(results);
     })
 })
-app.use(function(req,res,next){
-    res.header("Access-Control-Allow-Origin","*");
-    res.header("Access-Control-Allow-Headers","*");
-    next();
-});
+
 
 
 const port = process.env.PORT || 3000;
