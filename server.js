@@ -7,6 +7,7 @@ mongoClient.connect('mongodb+srv://ziming99:coolsinxx2@cluster0.e9nwn.mongodb.ne
     db = client.db('webstore');
 })
 app.use(express.json());
+const ObjectID = require('mongodb').ObjectID;
 
 app.use(function(req,res,next){
     res.header("Access-Control-Allow-Origin","*");
@@ -23,7 +24,6 @@ app.get('/',(req,res,next)=>{
     res.send("testing123");
 })
 
-const ObjectID = require('mongodb').ObjectID;
 app.put('/collection/:collectionNam/:id',(res,req,next)=>{
     req.collection.update(
     {_id: new ObjectID(req.params.id)},
@@ -38,6 +38,12 @@ app.post('/collection/:collectionName',(res,req,next)=>{
     req.collecton.insert(req.body,(e,results)=>{
         if (e) return next (e);
         res.send(results.ops)
+    })
+})
+app.get('/collection/:collectionName/:id',(req,res,next)=>{
+    req.collection.findOne({_id: new ObjectID(req.params.id)},(e,results)=>{
+        if(e)return next(e);
+        res.send(results);
     })
 })
 app.get('/collection/:collectionName',(req,res,next)=>{
