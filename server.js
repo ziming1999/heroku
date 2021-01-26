@@ -20,7 +20,7 @@ app.param('collectionName',(req,res,next,collectionName)=>{
 })
 
 app.get('/',(req,res,next)=>{
-    res.send("testing");
+    res.send("testing123");
 })
 
 const ObjectID = require('mongodb').ObjectID;
