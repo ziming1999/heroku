@@ -24,7 +24,7 @@ app.get('/',(req,res,next)=>{
     res.send("testing123");
 })
 
-app.put('/collection/:collectionName/:id',(res,req,next)=>{
+app.put('/collection/:collectionName/:id',(req,res,next)=>{
     req.collection.update(
     {_id: new ObjectID(req.params.id)},
     {$set:req.body},
@@ -34,7 +34,7 @@ app.put('/collection/:collectionName/:id',(res,req,next)=>{
         res.send(result.result.n===1) ? {msg:'success'} :{msg:'error'}
     })
 })
-app.post('/collection/:collectionName',(res,req,next)=>{
+app.post('/collection/:collectionName',(req,res,next)=>{
     req.collection.insert(req.body,(e,results)=>{
         if (e) return next (e);
         res.send(results.ops)
