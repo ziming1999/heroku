@@ -13,6 +13,7 @@ app.use(function(req,res,next){
     res.header("Access-Control-Allow-Headers","*");
     next();
 });
+
 app.param('collectionName',(req,res,next,collectionName)=>{
     req.collection = db.collection(collectionName);
     return next();
@@ -22,6 +23,17 @@ app.get('/',(req,res,next)=>{
     res.send("testing");
 })
 
+const ObjectID = require('mongodb').ObjectID;
+app.put('/collection/:collectionNam/:id',(res,req,next)=>{
+    req.collection.update(
+    {_id: new ObjectID(req.params.id)},
+    {$set:req.body},
+    {safe:true,multi:false},
+    (e,result)=>{
+        if (e) return next(e);
+        res.send(result.result.n===1) ? {msg:'success'} :{msg:'error'}
+    })
+})
 app.post('/collection/:collectionName',(res,req,next)=>{
     req.collecton.insert(req.body,(e,results)=>{
         if (e) return next (e);
