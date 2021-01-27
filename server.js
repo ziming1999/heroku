@@ -9,13 +9,6 @@ mongoClient.connect('mongodb+srv://ziming99:coolsinxx2@cluster0.e9nwn.mongodb.ne
 app.use(express.json());
 const ObjectID = require('mongodb').ObjectID;
 
-app.use(function(req,res,next){
-
-    res.header("Access-Control-Allow-Headers","*");
-    res.header("Access-Control-Allow-Methods","*");
-    res.header("Access-Control-Allow-Origin","*");
-    next();
-});
 
 app.param('collectionName',(req,res,next,collectionName)=>{
     req.collection = db.collection(collectionName);
@@ -56,6 +49,14 @@ app.get('/collection/:collectionName',(req,res,next)=>{
 })
 
 
+
+app.use(function(req,res,next){
+    res.header("Access-Control-Allow-Origin","*");
+    res.header("Access-Control-Allow-Headers","*");
+    res.header("Access-Control-Allow-Methods","*");
+
+    next();
+});
 
 const port = process.env.PORT || 3000;
 app.listen(port,()=>{
