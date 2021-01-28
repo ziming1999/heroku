@@ -1,5 +1,7 @@
 let express = require('express');
 let app = express();
+let path = require('path');
+let fs = require('fs');
 
 let db;
 let mongoClient = require('mongodb').MongoClient;
@@ -16,6 +18,20 @@ app.use(function(req,res,next){
     next();
 });
 
+app.use(function(req,res,next){
+    var filePath = path.join(__dirname,"static",req.url);
+    fs.stat(filePath,function(err,fileInfo){
+        if(err)
+        {
+            next();
+            return;
+        }
+        if(fileInfo.isFile())
+            res.sendFile(filePath);
+        else
+            next();
+    })
+})
 app.param('collectionName',(req,res,next,collectionName)=>{
     req.collection = db.collection(collectionName);
     return next();
