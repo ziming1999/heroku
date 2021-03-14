@@ -24,6 +24,10 @@ app.use(function(req,res,next){
     next();
 })
 
+var imagePath = path.resolve(__dirname,"images");
+app.use('/images',express.static(imagePath));
+
+
 app.use(function(req,res,next){
     var filePath = path.join(__dirname,"static",req.url);
     fs.stat(filePath,function(err,fileInfo){
@@ -75,9 +79,6 @@ app.get('/collection/:collectionName',(req,res,next)=>{
         res.send(results);
     })
 })
-
-
-
 
 
 const port = process.env.PORT || 3000;
